@@ -11,7 +11,7 @@ Vibe-Git 是 CLI 驱动的多人协作工具。通过终端调用 `vibe-git`；�
 
 把使用者当作第一次接触 Git、CLI 和多人协作的人来带，不要只甩一条命令。每次用户说“第一次使用”“不会安装”“怎么开始”或只给出一个模糊目标时，按下面顺序解释并推进：
 
-1. 先用一句话说明两个东西的关系：Skill 让 Codex 知道如何协作，CLI 提供房间、状态和上传命令；两者都需要安装。
+1. 先用一句话说明两个东西的关系：Skill 让 Agent 知道如何协作，CLI 提供房间、状态和上传命令；用户只需要先安装 Skill，用户明确要求“自动安装”时，Agent 直接执行 npm 安装 CLI。
 2. 先确认用户当前所在的是**自己的项目 Git 工作区**，不是 Vibe-Git 源码目录，也不是空文件夹。
 3. 确认 Node.js 24+、Git、Codex CLI 是否可用；缺什么就先给出安装方向，不要直接假设已安装。
 4. 安装完成后必须问清楚用户是“队长”还是“队员”。在身份不明确前，不要执行 `host start`、`connect`、`plan submit` 或其他会改变房间状态的命令。
@@ -25,7 +25,7 @@ Vibe-Git 是 CLI 驱动的多人协作工具。通过终端调用 `vibe-git`；�
 
 Skill 不会凭空替用户决定需求，但在用户明确目标和身份后，应主动把自然语言转换成安全、可回执的 CLI 流程：
 
-- **安装助手**：检查 `vibe-git --help`、依赖版本和当前工作区；缺少 CLI 时按 [安装参考](references/install.md) 引导安装，不推荐不存在的 `npm install -g vibe-git`。
+- **安装助手**：检查 `vibe-git --help`、依赖版本和当前工作区；缺少 CLI 且用户已明确要求自动安装时，在确认 Node.js/npm 可用后直接执行 `npm install -g @vibe-git/vibe-git`，再运行 `vibe-git --help` 验证。不要推荐不存在的 `npm install -g vibe-git`。
 - **队长开房**：确认用户是队长且位于项目工作区后，协助运行 `vibe-git host start`，告诉用户如何保存并私下发送加入命令，再用 `vibe-git open` 打开面板。
 - **队员入房**：要求用户粘贴队长提供的完整加入命令或 URL，确认当前是正确的项目工作区后运行 `vibe-git connect <join-url>`，随后检查 `status` 并打开面板。
 - **自动上传提案**：用户提供目标、现状、方案、验收标准或代码上下文后，帮助整理成 UTF-8 Markdown；在用户明确“提交/上传提案”后保存为不覆盖现有文件的 `.md`，运行 `vibe-git plan submit <文件.md>`，并把 CLI 成功回执和版本告诉用户。
@@ -40,9 +40,9 @@ Skill 不会凭空替用户决定需求，但在用户明确目标和身份后�
 ## 安装或定位 CLI
 
 1. 先运行 `vibe-git --help`。若命令已可用，直接使用；若已在源码仓库且构建产物存在，也可调用 `node <源码目录>/apps/cli/dist/index.js --help`。
-2. 需要安装时，检查 Node.js 24+、Git 和 Codex CLI。仓库地址为 `https://github.com/TFboy1/vibe-git.git`。若用户已有源码目录，就使用该目录，不重复克隆。这个仓库的可构建应用位于仓库根目录下的 `vibe-git/` 子目录。
-3. 在应用目录依次执行 `npm ci`、`npm run build`、`npm link`；Windows PowerShell 可用 `npm.cmd` 避开脚本执行策略。`npm link` 指向该源码目录，安装后保留目录。用 `vibe-git --help` 验证。不要推荐未发布的 `npm install -g vibe-git`。
-4. 安装命令和排障见 [安装参考](references/install.md)。仅在安装、更新或命令不可用时读取它。
+2. 用户要求自动安装且 CLI 不可用时，检查 Node.js 24+、npm、Git 和 Codex CLI，然后执行 `npm install -g @vibe-git/vibe-git`；安装完成后重新运行 `vibe-git --help`。
+3. 只有用户明确选择源码安装或正在开发 Vibe-Git 时，才进入源码仓库执行 `npm ci`、`npm run build`、`npm link`。Windows PowerShell 可用 `npm.cmd` 避开脚本执行策略。
+4. 安装命令、智能体一句话提示词和排障见 [安装参考](references/install.md)。仅在安装、更新或命令不可用时读取它。
 
 ### 安装完成后的首次教学
 
